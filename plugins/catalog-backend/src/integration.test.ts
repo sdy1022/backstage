@@ -92,10 +92,7 @@ class ImmediateStitcher implements Stitcher {
     }
   }
 
-  async stitchOne(options: {
-    entityRef: string;
-    stitchTicket?: string;
-  }): Promise<void> {
+  async stitchOne(options: { entityRef: string; stitchTicket?: string }) {
     return await this.delegate.stitchOne(options);
   }
 }
