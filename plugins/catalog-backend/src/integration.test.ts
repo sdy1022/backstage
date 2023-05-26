@@ -18,7 +18,7 @@ import { Knex } from 'knex';
 import { Logger } from 'winston';
 import { ConfigReader } from '@backstage/config';
 import { JsonObject } from '@backstage/types';
-import { CatalogProcessingEngine, EntityProvider } from './index';
+import { CatalogProcessingEngine } from './index';
 import { DatabaseManager, getVoidLogger } from '@backstage/backend-common';
 import { PermissionEvaluator } from '@backstage/plugin-permission-common';
 import {
@@ -35,6 +35,7 @@ import { ScmIntegrations } from '@backstage/integration';
 import { DefaultCatalogRulesEnforcer } from './ingestion/CatalogRules';
 import { DefaultStitcherEngine } from './stitching/DefaultStitcherEngine';
 import { DefaultStitcher } from './stitching/DefaultStitcher';
+import { Stitcher } from './stitching/types';
 import { DefaultEntitiesCatalog } from './service/DefaultEntitiesCatalog';
 import {
   DefaultCatalogProcessingEngine,
@@ -46,20 +47,58 @@ import { connectEntityProviders } from './processing/connectEntityProviders';
 import { EntitiesCatalog } from './catalog/types';
 import { RefreshOptions, RefreshService } from './service/types';
 import {
+  EntityProvider,
   CatalogProcessorEmit,
   EntityProviderConnection,
-  LocationSpec,
   processingResult,
 } from '@backstage/plugin-catalog-node';
+import { LocationSpec } from '@backstage/plugin-catalog-common';
 import { RefreshStateItem } from './database/types';
 import { DefaultProviderDatabase } from './database/DefaultProviderDatabase';
 import { InputError } from '@backstage/errors';
+import { DbRefreshStateRow } from './database/tables';
 
 const voidLogger = getVoidLogger();
 
 type ProgressTrackerWithErrorReports = ProgressTracker & {
   reportError(unprocessedEntity: Entity, errors: Error[]): void;
 };
+
+class ImmediateStitcher implements Stitcher {
+  constructor(
+    private readonly knex: Knex,
+    private readonly delegate: Stitcher,
+  ) {}
+
+  async markForStitching(options: {
+    entityRefs?: Iterable<string>;
+    entityIds?: Iterable<string>;
+  }) {
+    const entityRefs: string[] = [];
+
+    if (options.entityRefs) {
+      entityRefs.push(...options.entityRefs);
+    }
+
+    if (options.entityIds) {
+      const rows = await this.knex<DbRefreshStateRow>('refresh_state')
+        .select('entity_ref')
+        .whereIn('entity_id', [...options.entityIds]!);
+      entityRefs.push(...rows.map(r => r.entity_ref));
+    }
+
+    for (const entityRef of entityRefs) {
+      await this.delegate.stitchOne({ entityRef });
+    }
+  }
+
+  async stitchOne(options: {
+    entityRef: string;
+    stitchTicket?: string;
+  }): Promise<void> {
+    return await this.delegate.stitchOne(options);
+  }
+}
 
 class TestProvider implements EntityProvider {
   #connection?: EntityProviderConnection;
@@ -226,9 +265,9 @@ class TestHarness {
 
     await applyDatabaseMigrations(db);
 
-    const stitcher = new DefaultStitcher(db, logger);
+    const stitcher = new ImmediateStitcher(db, new DefaultStitcher(db, logger));
     const stitcherEngine = new DefaultStitcherEngine({
-      database: db,
+      knex: db,
       logger,
       stitcher,
     });
@@ -242,7 +281,6 @@ class TestHarness {
       logger,
     });
     const processingDatabase = new DefaultProcessingDatabase({
-      stitcher,
       database: db,
       logger,
       refreshInterval: () => 0.05,
@@ -291,7 +329,6 @@ class TestHarness {
       processingDatabase,
       orchestrator,
       stitcher,
-      stitcherEngine,
       createHash: () => createHash('sha1'),
       pollingIntervalMs: 50,
       onProcessingError: event => {
@@ -308,7 +345,16 @@ class TestHarness {
 
     return new TestHarness(
       catalog,
-      engine,
+      {
+        async start() {
+          await engine.start();
+          await stitcherEngine.start();
+        },
+        async stop() {
+          await engine.stop();
+          await stitcherEngine.stop();
+        },
+      },
       refresh,
       provider,
       proxyProgressTracker,
