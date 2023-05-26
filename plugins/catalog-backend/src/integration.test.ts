@@ -33,7 +33,8 @@ import { DefaultCatalogDatabase } from './database/DefaultCatalogDatabase';
 import { DefaultProcessingDatabase } from './database/DefaultProcessingDatabase';
 import { ScmIntegrations } from '@backstage/integration';
 import { DefaultCatalogRulesEnforcer } from './ingestion/CatalogRules';
-import { Stitcher } from './stitching/Stitcher';
+import { DefaultStitcherEngine } from './stitching/DefaultStitcherEngine';
+import { DefaultStitcher } from './stitching/DefaultStitcher';
 import { DefaultEntitiesCatalog } from './service/DefaultEntitiesCatalog';
 import {
   DefaultCatalogProcessingEngine,
@@ -225,6 +226,13 @@ class TestHarness {
 
     await applyDatabaseMigrations(db);
 
+    const stitcher = new DefaultStitcher(db, logger);
+    const stitcherEngine = new DefaultStitcherEngine({
+      database: db,
+      logger,
+      stitcher,
+    });
+
     const catalogDatabase = new DefaultCatalogDatabase({
       database: db,
       logger,
@@ -234,6 +242,7 @@ class TestHarness {
       logger,
     });
     const processingDatabase = new DefaultProcessingDatabase({
+      stitcher,
       database: db,
       logger,
       refreshInterval: () => 0.05,
@@ -267,7 +276,6 @@ class TestHarness {
       policy: EntityPolicies.allOf([]),
       legacySingleProcessorValidation: false,
     });
-    const stitcher = new Stitcher(db, logger);
     const catalog = new DefaultEntitiesCatalog({
       database: db,
       logger,
@@ -283,6 +291,7 @@ class TestHarness {
       processingDatabase,
       orchestrator,
       stitcher,
+      stitcherEngine,
       createHash: () => createHash('sha1'),
       pollingIntervalMs: 50,
       onProcessingError: event => {
