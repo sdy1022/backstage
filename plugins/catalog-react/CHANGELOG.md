@@ -1,5 +1,16 @@
 # @backstage/plugin-catalog-react
 
+## 1.7.0-next.1
+
+### Patch Changes
+
+- 429319d080cd: `EntityAutocompletePicker` add `initialSelectedOptions` prop
+- 429319d080cd: `EntityLifecycleFilter` loads data using the facets endpoint
+- Updated dependencies
+  - @backstage/core-plugin-api@1.5.2-next.0
+  - @backstage/core-components@0.13.2-next.1
+  - @backstage/plugin-permission-react@0.4.13-next.0
+
 ## 1.7.0-next.0
 
 ### Minor Changes

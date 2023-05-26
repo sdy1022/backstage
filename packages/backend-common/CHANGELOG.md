@@ -1,5 +1,17 @@
 # @backstage/backend-common
 
+## 0.18.6-next.1
+
+### Patch Changes
+
+- 9f47a743632c: Fixed typo in HostDiscovery's JSDoc
+- Updated dependencies
+  - @backstage/backend-app-api@0.4.4-next.1
+  - @backstage/backend-plugin-api@0.5.3-next.1
+  - @backstage/config-loader@1.3.1-next.0
+  - @backstage/config@1.0.7
+  - @backstage/integration-aws-node@0.1.3
+
 ## 0.18.6-next.0
 
 ### Patch Changes

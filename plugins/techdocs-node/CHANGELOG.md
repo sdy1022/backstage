@@ -1,5 +1,15 @@
 # @backstage/plugin-techdocs-node
 
+## 1.7.2-next.1
+
+### Patch Changes
+
+- 7d4a09304f67: Use latest techdocs docker image by default. The latest image contains security updates.
+- Updated dependencies
+  - @backstage/backend-common@0.18.6-next.1
+  - @backstage/config@1.0.7
+  - @backstage/integration-aws-node@0.1.3
+
 ## 1.7.2-next.0
 
 ### Patch Changes

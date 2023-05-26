@@ -1,5 +1,11 @@
 # @backstage/create-app
 
+## 0.5.2-next.1
+
+### Patch Changes
+
+- 08f177b91084: Add link from Template entity to the scaffolder launch page for the template in the AboutCard.
+
 ## 0.5.2-next.0
 
 ### Patch Changes

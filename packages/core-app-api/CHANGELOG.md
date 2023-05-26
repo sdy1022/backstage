@@ -1,5 +1,14 @@
 # @backstage/core-app-api
 
+## 1.8.1-next.0
+
+### Patch Changes
+
+- 74b216ee4e50: Add `PropsWithChildren` to usages of `ComponentType`, in preparation for React 18 where the children are no longer implicit.
+- Updated dependencies
+  - @backstage/core-plugin-api@1.5.2-next.0
+  - @backstage/config@1.0.7
+
 ## 1.8.0
 
 ### Minor Changes

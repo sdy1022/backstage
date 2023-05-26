@@ -4285,7 +4285,26 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@backstage/core-plugin-api@^1.3.0, @backstage/core-plugin-api@^1.5.0, @backstage/core-plugin-api@^1.5.1, @backstage/core-plugin-api@workspace:^, @backstage/core-plugin-api@workspace:packages/core-plugin-api":
+"@backstage/core-plugin-api@npm:^1.3.0, @backstage/core-plugin-api@npm:^1.5.0, @backstage/core-plugin-api@npm:^1.5.1":
+  version: 1.5.1
+  resolution: "@backstage/core-plugin-api@npm:1.5.1"
+  dependencies:
+    "@backstage/config": ^1.0.7
+    "@backstage/types": ^1.0.2
+    "@backstage/version-bridge": ^1.0.4
+    "@types/react": ^16.13.1 || ^17.0.0
+    history: ^5.0.0
+    prop-types: ^15.7.2
+    zen-observable: ^0.10.0
+  peerDependencies:
+    react: ^16.13.1 || ^17.0.0
+    react-dom: ^16.13.1 || ^17.0.0
+    react-router-dom: 6.0.0-beta.0 || ^6.3.0
+  checksum: 59d75c906040ddd436135ab8a281792aec5cf5432f573b1273dba9c0b8b6f35861a899e17cc62417fe596d46903fc5807e632e49c5a8e43d866c639d71c0b86c
+  languageName: node
+  linkType: hard
+
+"@backstage/core-plugin-api@workspace:^, @backstage/core-plugin-api@workspace:packages/core-plugin-api":
   version: 0.0.0-use.local
   resolution: "@backstage/core-plugin-api@workspace:packages/core-plugin-api"
   dependencies:
@@ -8036,7 +8055,26 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@backstage/plugin-permission-react@^0.4.12, @backstage/plugin-permission-react@workspace:^, @backstage/plugin-permission-react@workspace:plugins/permission-react":
+"@backstage/plugin-permission-react@npm:^0.4.12":
+  version: 0.4.12
+  resolution: "@backstage/plugin-permission-react@npm:0.4.12"
+  dependencies:
+    "@backstage/config": ^1.0.7
+    "@backstage/core-plugin-api": ^1.5.1
+    "@backstage/plugin-permission-common": ^0.7.5
+    "@types/react": ^16.13.1 || ^17.0.0
+    cross-fetch: ^3.1.5
+    react-use: ^17.2.4
+    swr: ^2.0.0
+  peerDependencies:
+    react: ^16.13.1 || ^17.0.0
+    react-dom: ^16.13.1 || ^17.0.0
+    react-router-dom: 6.0.0-beta.0 || ^6.3.0
+  checksum: c431772c887c52302ad640233fea16fab44dcc16436cf234e337602dcb47fd9e4afbc9eb89223199016e71f7f4a45276e3095bdc2ef1bf49e5c368cccfc87d06
+  languageName: node
+  linkType: hard
+
+"@backstage/plugin-permission-react@workspace:^, @backstage/plugin-permission-react@workspace:plugins/permission-react":
   version: 0.0.0-use.local
   resolution: "@backstage/plugin-permission-react@workspace:plugins/permission-react"
   dependencies:

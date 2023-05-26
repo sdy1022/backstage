@@ -1,5 +1,15 @@
 # @backstage/plugin-scaffolder-react
 
+## 1.4.1-next.1
+
+### Patch Changes
+
+- 74b216ee4e50: Add `PropsWithChildren` to usages of `ComponentType`, in preparation for React 18 where the children are no longer implicit.
+- Updated dependencies
+  - @backstage/plugin-catalog-react@1.7.0-next.1
+  - @backstage/core-plugin-api@1.5.2-next.0
+  - @backstage/core-components@0.13.2-next.1
+
 ## 1.4.1-next.0
 
 ### Patch Changes

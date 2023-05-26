@@ -1,5 +1,18 @@
 # @backstage/plugin-home
 
+## 0.5.3-next.1
+
+### Patch Changes
+
+- d1cfb4e4c4cd: Update set up documentation to export homepage as element instead of React component.
+- 2e4940e1a8f8: Allow more customization for the CustomHomepageGrid
+- Updated dependencies
+  - @backstage/plugin-catalog-react@1.7.0-next.1
+  - @backstage/core-plugin-api@1.5.2-next.0
+  - @backstage/core-components@0.13.2-next.1
+  - @backstage/plugin-home-react@0.1.0-next.1
+  - @backstage/config@1.0.7
+
 ## 0.5.3-next.0
 
 ### Patch Changes
